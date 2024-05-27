@@ -1,13 +1,13 @@
 # Unique Following Finder
 
-This Flask application allows you to find unique accounts that you are following across various social media platforms, excluding those who are already following you back or present in a whitelist.
+This Flask application allows you to find unique accounts that you are following across instagram, excluding those who are already following you back or present in a whitelist.
 
 ## Usage
 
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your_username/unique-following-finder.git
+    git clone https://github.com/misteralipour/Instagram-Unfollower-Finder
     ```
 
 2. Install dependencies:
@@ -19,14 +19,14 @@ This Flask application allows you to find unique accounts that you are following
 3. Run the Flask application:
 
     ```bash
-    python app.py
+    python index.py
     ```
 
 4. Open your web browser and navigate to `http://localhost:5000`.
 
 5. Upload your followers and following JSON files, optionally include a whitelist JSON file.
 
-6. Click on the "Submit" button to process the files.
+6. Click on the "Upload and Process" button to process the files.
 
 7. Once processed, the application will generate an HTML file containing the unique accounts you are following. You can download this file to view the results.
 

@@ -68,7 +68,7 @@ def upload_files():
 
         followers_file = request.files['followers_file']
         following_file = request.files['following_file']
-        whitelist_file = request.files.get('whitelist_file')  # Optional
+        whitelist_file = request.files.get('whitelist_file')
 
         if followers_file.filename == '' or following_file.filename == '':
             return "No selected file(s)", 400

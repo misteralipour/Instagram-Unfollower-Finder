@@ -32,7 +32,7 @@ This Flask application allows you to find unique accounts that you are following
 
 ## File Structure
 
-- `app.py`: Contains the Flask application code.
+- `index.py`: Contains the Flask application code.
 - `uploads/`: Directory where uploaded files are stored temporarily.
 - `templates/`: Directory containing HTML templates for the web interface.
 

@@ -1,13 +1,8 @@
 from flask import Flask, request, render_template, send_file
-import os
 import json
+import tempfile
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
 
 def process_files(followers_file, following_file, whitelist_file=None):
     # Load followers data
@@ -73,19 +68,19 @@ def upload_files():
         if followers_file.filename == '' or following_file.filename == '':
             return "No selected file(s)", 400
 
-        followers_file_path = os.path.join(app.config['UPLOAD_FOLDER'], followers_file.filename)
-        following_file_path = os.path.join(app.config['UPLOAD_FOLDER'], following_file.filename)
-        whitelist_file_path = None
+        # Store files in temporary files
+        with tempfile.NamedTemporaryFile(delete=False) as temp_followers_file, \
+             tempfile.NamedTemporaryFile(delete=False) as temp_following_file, \
+             tempfile.NamedTemporaryFile(delete=False) as temp_whitelist_file:
 
-        followers_file.save(followers_file_path)
-        following_file.save(following_file_path)
+            followers_file.save(temp_followers_file.name)
+            following_file.save(temp_following_file.name)
 
-        if whitelist_file and whitelist_file.filename != '':
-            whitelist_file_path = os.path.join(app.config['UPLOAD_FOLDER'], whitelist_file.filename)
-            whitelist_file.save(whitelist_file_path)
+            if whitelist_file and whitelist_file.filename != '':
+                whitelist_file.save(temp_whitelist_file.name)
 
-        # Process files and generate the HTML
-        html_file_path = process_files(followers_file_path, following_file_path, whitelist_file_path)
+            # Process files and generate the HTML
+            html_file_path = process_files(temp_followers_file.name, temp_following_file.name, temp_whitelist_file.name)
 
         return send_file(html_file_path, as_attachment=True)
 

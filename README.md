@@ -28,6 +28,9 @@ This Flask application allows you to find unique accounts that you are following
 
 5. Upload your followers and following JSON files, optionally include a whitelist JSON file.
 
+How to get your followers and followings json:
+https://raw.githubusercontent.com/misteralipour/Instagram-Unfollower-Finder/main/static/tutorial.mp4
+
 6. Click on the "Upload and Process" button to process the files.
 
 7. Once processed, the application will generate an HTML file containing the unique accounts you are following. You can download this file to view the results.

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Instagram JSON Processor</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Upload Instagram JSON Files</h1>
+        <form method="post" enctype="multipart/form-data" class="mt-4">
+            <div class="form-group">
+                <label for="followers_file">Followers JSON File:</label>
+                <input type="file" class="form-control-file" name="followers_file" id="followers_file" required>
+            </div>
+            <div class="form-group">
+                <label for="following_file">Following JSON File:</label>
+                <input type="file" class="form-control-file" name="following_file" id="following_file" required>
+            </div>
+            <div class="form-group">
+                <label for="whitelist_file">Whitelist JSON File (Optional):</label>
+                <input type="file" class="form-control-file" name="whitelist_file" id="whitelist_file">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Upload and Process</button>
+        </form>
+        <hr>
+        <div class="mt-5">
+            <h2>Tutorial Video</h2>
+            <div class="embed-responsive embed-responsive-16by9">
+                <video class="embed-responsive-item" controls>
+                    <source src="{{ url_for('static', filename='tutorial.mp4') }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+        <div class="mt-5">
+            <h2>Sample Whitelist JSON File</h2>
+            <pre><code>{
+  "whitelist": [
+    "example_account1",
+    "example_account2"
+  ]
+}</code></pre>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

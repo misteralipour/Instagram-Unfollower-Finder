@@ -1,6 +1,8 @@
 # Unique Following Finder
 
-This Flask application allows you to find unique accounts that you are following across instagram, excluding those who are already following you back or present in a whitelist.
+This Flask application allows you to find unique accounts that you are following across Instagram, excluding those who are already following you back or present in a whitelist.
+
+![Screenshot](Screenshot.jpeg)
 
 ## Usage
 
@@ -45,7 +47,3 @@ This Flask application allows you to find unique accounts that you are following
 ## Acknowledgements
 
 This project is inspired by the need to analyze social media following data in a convenient manner.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

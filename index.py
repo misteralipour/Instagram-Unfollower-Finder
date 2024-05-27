@@ -54,37 +54,30 @@ def process_files(followers_file, following_file, whitelist_file=None):
 
     return html_file_path
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/api/upload', methods=['POST'])
 def upload_files():
-    if request.method == 'POST':
-        # Check if the post request has the files
-        if 'followers_file' not in request.files or 'following_file' not in request.files:
-            return "Missing file(s)", 400
+    if 'followers_file' not in request.files or 'following_file' not in request.files:
+        return "Missing file(s)", 400
 
-        followers_file = request.files['followers_file']
-        following_file = request.files['following_file']
-        whitelist_file = request.files.get('whitelist_file')  # Optional
+    followers_file = request.files['followers_file']
+    following_file = request.files['following_file']
+    whitelist_file = request.files.get('whitelist_file')  # Optional
 
-        if followers_file.filename == '' or following_file.filename == '':
-            return "No selected file(s)", 400
+    if followers_file.filename == '' or following_file.filename == '':
+        return "No selected file(s)", 400
 
-        # Store files in temporary files
-        with tempfile.NamedTemporaryFile(delete=False) as temp_followers_file, \
-             tempfile.NamedTemporaryFile(delete=False) as temp_following_file, \
-             tempfile.NamedTemporaryFile(delete=False) as temp_whitelist_file:
+    # Read files into memory
+    followers_data = followers_file.read()
+    following_data = following_file.read()
+    whitelist_data = whitelist_file.read() if whitelist_file else None
 
-            followers_file.save(temp_followers_file.name)
-            following_file.save(temp_following_file.name)
+    # Process files and generate the HTML
+    html_content = process_files(followers_data, following_data, whitelist_data)
 
-            if whitelist_file and whitelist_file.filename != '':
-                whitelist_file.save(temp_whitelist_file.name)
+    # Create a file-like object from HTML content
+    html_file = io.BytesIO(html_content.encode())
 
-            # Process files and generate the HTML
-            html_file_path = process_files(temp_followers_file.name, temp_following_file.name, temp_whitelist_file.name)
-
-        return send_file(html_file_path, as_attachment=True)
-
-    return render_template('index.html')
+    return send_file(html_file, as_attachment=True, attachment_filename='unique_following.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

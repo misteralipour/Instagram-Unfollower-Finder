@@ -10,9 +10,6 @@
         {
             "src": "/(.*)",
             "dest": "/"
-        },
-        { 
-            "src": "/api/upload",
-            "dest": "/api/upload" }
+        }
     ]
 }

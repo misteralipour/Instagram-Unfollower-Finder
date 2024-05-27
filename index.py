@@ -1,8 +1,13 @@
 from flask import Flask, request, render_template, send_file
+import os
 import json
-import tempfile
 
 app = Flask(__name__)
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 def process_files(followers_file, following_file, whitelist_file=None):
     # Load followers data
@@ -54,30 +59,37 @@ def process_files(followers_file, following_file, whitelist_file=None):
 
     return html_file_path
 
-@app.route('/api/upload', methods=['POST'])
+@app.route('/', methods=['GET', 'POST'])
 def upload_files():
-    if 'followers_file' not in request.files or 'following_file' not in request.files:
-        return "Missing file(s)", 400
+    if request.method == 'POST':
+        # Check if the post request has the files
+        if 'followers_file' not in request.files or 'following_file' not in request.files:
+            return "Missing file(s)", 400
 
-    followers_file = request.files['followers_file']
-    following_file = request.files['following_file']
-    whitelist_file = request.files.get('whitelist_file')  # Optional
+        followers_file = request.files['followers_file']
+        following_file = request.files['following_file']
+        whitelist_file = request.files.get('whitelist_file')  # Optional
 
-    if followers_file.filename == '' or following_file.filename == '':
-        return "No selected file(s)", 400
+        if followers_file.filename == '' or following_file.filename == '':
+            return "No selected file(s)", 400
 
-    # Read files into memory
-    followers_data = followers_file.read()
-    following_data = following_file.read()
-    whitelist_data = whitelist_file.read() if whitelist_file else None
+        followers_file_path = os.path.join(app.config['UPLOAD_FOLDER'], followers_file.filename)
+        following_file_path = os.path.join(app.config['UPLOAD_FOLDER'], following_file.filename)
+        whitelist_file_path = None
 
-    # Process files and generate the HTML
-    html_content = process_files(followers_data, following_data, whitelist_data)
+        followers_file.save(followers_file_path)
+        following_file.save(following_file_path)
 
-    # Create a file-like object from HTML content
-    html_file = io.BytesIO(html_content.encode())
+        if whitelist_file and whitelist_file.filename != '':
+            whitelist_file_path = os.path.join(app.config['UPLOAD_FOLDER'], whitelist_file.filename)
+            whitelist_file.save(whitelist_file_path)
 
-    return send_file(html_file, as_attachment=True, attachment_filename='unique_following.html')
+        # Process files and generate the HTML
+        html_file_path = process_files(followers_file_path, following_file_path, whitelist_file_path)
+
+        return send_file(html_file_path, as_attachment=True)
+
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
